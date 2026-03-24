@@ -1,0 +1,121 @@
+/* ========== CHATBOT CSS ========== */
+/* Ensure Tailwind doesn't conflict */
+#ai-chatbot-app {
+    font-family: 'Inter', sans-serif;
+}
+
+/* Glassmorphism Window */
+.chat-glass {
+    background: rgba(11, 14, 20, 0.75);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6); /* shadow-2xl equivalent */
+}
+
+/* Scrollbar styling */
+.chat-scroll::-webkit-scrollbar {
+    width: 6px;
+}
+.chat-scroll::-webkit-scrollbar-track {
+    background: transparent;
+}
+.chat-scroll::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.15);
+    border-radius: 10px;
+}
+.chat-scroll::-webkit-scrollbar-thumb:hover {
+    background: rgba(255,255,255,0.3);
+}
+
+/* Spin animation for refresh */
+.rotate-spin {
+    animation: spin-refresh 0.5s ease-in-out forwards;
+}
+@keyframes spin-refresh {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Typing Indicator Animation */
+.typing-dot {
+    width: 6px;
+    height: 6px;
+    background-color: #a9abb3;
+    border-radius: 50%;
+    animation: typingBounce 1.4s infinite ease-in-out both;
+}
+.typing-dot:nth-child(1) { animation-delay: -0.32s; }
+.typing-dot:nth-child(2) { animation-delay: -0.16s; }
+@keyframes typingBounce {
+    0%, 80%, 100% { transform: scale(0); }
+    40% { transform: scale(1); }
+}
+
+/* Messages Fade-in */
+@keyframes fadeInMsg {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.msg-animate {
+    animation: fadeInMsg 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+/* ========== MARKDOWN CSS (.chat-markdown) ========== */
+.chat-markdown {
+    color: #ecedf6;
+    font-size: 14px;
+    word-wrap: break-word;
+}
+.chat-markdown p {
+    line-height: 1.6;
+    margin-bottom: 0.75rem;
+}
+.chat-markdown ul {
+    list-style-type: disc;
+    padding-left: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+.chat-markdown li {
+    margin-bottom: 0.25rem;
+    line-height: 1.5;
+}
+.chat-markdown strong {
+    color: #9ba8ff; /* Accent color theo website */
+    font-weight: 700;
+}
+.chat-markdown code {
+    background-color: #10131a;
+    color: #81ecff;
+    font-family: 'Fira Code', Consolas, monospace;
+    padding: 0.15rem 0.3rem;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+.chat-markdown pre {
+    background-color: #0b0e14;
+    padding: 1rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin-bottom: 0.75rem;
+    border: 1px solid rgba(255,255,255,0.05);
+}
+.chat-markdown pre code {
+    background-color: transparent;
+    padding: 0;
+    color: #ecedf6;
+}
+.chat-markdown blockquote {
+    border-left: 4px solid #4963ff; /* Accent border */
+    padding-left: 1rem;
+    color: rgba(236, 237, 246, 0.65); /* Nhạt hơn text bình thường */
+    margin-bottom: 0.75rem;
+    font-style: italic;
+    background: linear-gradient(90deg, rgba(73,99,255,0.1) 0%, transparent 100%);
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    border-radius: 0 4px 4px 0;
+}
+.chat-markdown *:last-child {
+    margin-bottom: 0;
+}
