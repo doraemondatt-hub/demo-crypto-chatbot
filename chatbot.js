@@ -66,7 +66,7 @@ function resetChat() {
     chatMessages.innerHTML = '';
 
     // Khởi tạo hiển thị tin nhắn chào mặc định
-    const defaultGreeting = "👋 Chào bạn! Mình là AI Assistant độc quyền của chuyên gia Dainel Trần.\n\nMình có thể giúp gì cho bạn về các giải pháp **Trading ngoại hối** hay tư vấn **Tài sản mã hóa**?";
+    const defaultGreeting = "👋 Chào bạn! Mình là AI Assistant độc quyền của chuyên gia Daniel Trần.\n\nMình có thể giúp gì cho bạn về các giải pháp **Trading ngoại hối** hay tư vấn **Tài sản mã hóa**?";
     chatHistory.push({ role: "assistant", content: defaultGreeting });
 
     // Render 
