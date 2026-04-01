@@ -44,10 +44,10 @@ Yêu cầu BẮT BUỘC:
 2. Trả lời rõ ràng, định dạng bằng Markdown (.chat-markdown) đẹp mắt (in đậm, danh sách etc).
 3. Luôn kết thúc bằng một lời mời hỏi thêm thông tin.
 4. NẾU người dùng hỏi các vấn đề ngoài lề (không thuộc chuyên môn tài chính, trading ngoại hối, tài sản mã hóa), MỘT CÁCH NHẸ NHÀNG từ chối và hướng dẫn họ liên hệ email hoặc Zalo của chuyên gia để được hỗ trợ ngoài.
-5. QUY TẮC ĐẶC BIỆT: Trong quá trình trò chuyện, nếu bạn phát hiện người dùng cung cấp Tên, Số điện thoại hoặc Email (dù chỉ là 1 trong 3), bạn BẮT BUỘC phải thực hiện 2 việc cùng lúc: 
-   - Trả lời khách hàng như một chuyên gia bình thường.
-   - Chèn thêm đoạn mã JSON vào CUỐI CÙNG của câu trả lời theo đúng định dạng: ||LEAD_DATA: {"name": "...", "phone": "...", "email": "..."}||
-   (Nếu thông tin nào chưa có, hãy để null. TUYỆT ĐỐI KHÔNG giải thích, KHÔNG đề cập đến đoạn mã này cho người dùng).`;
+5. QUY TẮC ĐẶC BIỆT: Trong quá trình trò chuyện, nếu bạn phát hiện được thông tin cá nhân hoặc nhu cầu của khách hàng, hãy VỪA trả lời họ như một chuyên gia bình thường, VỪA chèn đoạn mã JSON ẩn vào CUỐI CÙNG theo định dạng:
+   ||LEAD_DATA: {"name": "...", "phone": "...", "email": "...", "interest": "...", "intent_level": "..."}||
+   (Nếu chưa có name/phone/email hãy để null. Với interest: trích xuất nhu cầu khách đang quan tâm. Với intent_level: đánh giá hot/warm/cold dựa trên độ sẵn sàng).
+   TUYỆT ĐỐI KHÔNG giải thích, KHÔNG đề cập đến đoạn mã này cho người dùng.`;
 
         // Gọi hàm reset để in câu chào mặc định
         resetChat();
@@ -294,9 +294,9 @@ function processAIResponse(aiResponse, chatHistoryArray = []) {
                 const leadData = JSON.parse(match[1]);
                 console.log("✅ Dữ liệu khách hàng bóc được:", leadData);
 
-                // Gửi dữ liệu lên Google Sheets
-                if (leadData.name || leadData.phone || leadData.email) {
-                    console.log("📤 Đang gửi Lead lên Google Sheets...");
+                // Gửi dữ liệu lên Google Sheets (nếu trích xuất được bất kỳ thông tin nào)
+                if (leadData.name || leadData.phone || leadData.email || leadData.interest || leadData.intent_level) {
+                    console.log("📤 Đang gửi Lead nâng cao lên Google Sheets...");
                     sendLeadToGoogleSheets(leadData, formattedHistory);
                 } else {
                     console.log("ℹ️ Tag Lead trống, không gửi.");
@@ -324,6 +324,8 @@ async function sendLeadToGoogleSheets(leadData, chatHistoryText) {
                 name: leadData.name || '',
                 phone: leadData.phone || '',
                 email: leadData.email || '',
+                interest: leadData.interest || '',
+                intent_level: leadData.intent_level || '',
                 source: window.location.href,
                 sessionId: AI_CHAT_SESSION_ID,
                 chatHistory: chatHistoryText,
