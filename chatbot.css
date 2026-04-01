@@ -10,7 +10,14 @@
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
     border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6); /* shadow-2xl equivalent */
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6); 
+    
+    /* FIX: Giới hạn chiều cao để kích hoạt cuộn */
+    display: flex !important;
+    flex-direction: column !important;
+    height: 550px !important;
+    max-height: 80vh !important;
+    overflow: hidden !important;
 }
 
 /* Scrollbar styling - FIXED SCROLL ISSUE */
