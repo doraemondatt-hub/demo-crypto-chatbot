@@ -260,7 +260,7 @@ window.addEventListener("DOMContentLoaded", initChatbot);
 // ============================================================
 
 // URL của Google Apps Script Web App
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwos-fD4cliEUiXsK6EivHUMchaCBDAOZEXkuixs5fTqv_8dJLLdR9z2FSCz4_g_PkjZA/exec';
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwaEexMAhGrzV8O4CW3n2EBish5Q1oAYYnO-GBE29iYAuOHARAPFnUCDcPdo-T4gAqjaA/exec';
 
 // Tạo Session ID duy nhất cho mỗi phiên tải trang
 const AI_CHAT_SESSION_ID = 'session_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7);
