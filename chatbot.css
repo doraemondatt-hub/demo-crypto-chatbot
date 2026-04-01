@@ -13,12 +13,15 @@
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6); /* shadow-2xl equivalent */
 }
 
-/* Scrollbar styling */
-/* Scrollbar styling */
-.chat-scroll {
-    overflow-y: scroll !important;
-    max-height: 100%;
+/* Scrollbar styling - FIXED SCROLL ISSUE */
+#chat-messages {
+    flex: 1 !important;
+    overflow-y: auto !important;
+    min-height: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
 }
+
 .chat-scroll::-webkit-scrollbar {
     width: 6px;
 }
