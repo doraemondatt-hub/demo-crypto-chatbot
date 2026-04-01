@@ -1,0 +1,72 @@
+/**
+ * GOOGLE APPS SCRIPT - AI LEAD CAPTURE SYSTEM (ULTRA)
+ * Tính năng: Trích xuất 5 trường + Tự động gửi Email cảnh báo Leads Nóng
+ */
+
+// --- CẤU HÌNH ---
+var SALES_EMAIL = "doraemondatt@gmail.com"; // THAY EMAIL CỦA BẠN VÀO ĐÂY ĐỂ NHẬN THÔNG BÁO
+
+function doPost(e) {
+  try {
+    var data = JSON.parse(e.postData.contents);
+    
+    var timestamp   = data.timestamp || new Date().toLocaleString('vi-VN');
+    var sessionId   = data.sessionId;
+    var name        = data.name || "Khách chưa để lại tên";
+    var phone       = data.phone || "Chưa có SĐT";
+    var email       = data.email || "Chưa có email";
+    var interest    = data.interest || "Đang tìm hiểu chung";
+    var intentLevel = (data.intent_level || "").toLowerCase();
+    var source      = data.source || "";
+    var chatHistory = data.chatHistory || "";
+
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    var sheet = ss.getSheetByName("Leads") || ss.getSheets()[0];
+    var rows = sheet.getDataRange().getValues();
+    var rowIndex = -1;
+
+    // Tìm kiếm Session trùng để cập nhật (Upsert)
+    for (var i = 1; i < rows.length; i++) {
+      if (rows[i][1] == sessionId) {
+        rowIndex = i + 1;
+        break;
+      }
+    }
+
+    if (rowIndex != -1) {
+      if (data.name)   sheet.getRange(rowIndex, 3).setValue(name);
+      if (data.phone)  sheet.getRange(rowIndex, 4).setValue(phone);
+      if (data.email)  sheet.getRange(rowIndex, 5).setValue(email);
+      if (interest)    sheet.getRange(rowIndex, 6).setValue(interest);
+      if (intentLevel) sheet.getRange(rowIndex, 7).setValue(intentLevel);
+      
+      sheet.getRange(rowIndex, 1).setValue(timestamp);
+      sheet.getRange(rowIndex, 9).setValue(chatHistory);
+    } else {
+      sheet.appendRow([timestamp, sessionId, name, phone, email, interest, intentLevel, source, chatHistory]);
+    }
+
+    // --- TÍNH NĂNG CẢNH BÁO EMAIL CHO LEADS NÓNG (HOT) ---
+    if (intentLevel === "hot") {
+      sendHotLeadEmail(name, phone, email, interest, timestamp);
+    }
+
+    return ContentService.createTextOutput("SUCCESS");
+
+  } catch (error) {
+    return ContentService.createTextOutput("ERROR: " + error.toString());
+  }
+}
+
+function sendHotLeadEmail(name, phone, email, interest, time) {
+  var subject = "📢 [KHÁCH HÀNG NÓNG] - CẦN LIÊN HỆ NGAY!";
+  var body = "📢 KHÁCH HÀNG NÓNG - CẦN LIÊN HỆ NGAY!\n\n" +
+             "Tên: " + name + "\n" +
+             "SĐT: " + phone + "\n" +
+             "Email: " + email + "\n" +
+             "Quan tâm: " + interest + "\n" +
+             "Thời gian: " + time + "\n\n" +
+             "Ghi chú: Vui lòng liên hệ khách hàng này trong vòng 30 phút để chốt giao dịch!";
+             
+  MailApp.sendEmail(SALES_EMAIL, subject, body);
+}
