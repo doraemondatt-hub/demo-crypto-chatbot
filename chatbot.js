@@ -312,25 +312,29 @@ function processAIResponse(aiResponse, chatHistoryArray = []) {
  * Hàm gửi dữ liệu Lead lên Google Apps Script → Google Sheets
  */
 async function sendLeadToGoogleSheets(leadData, chatHistoryText) {
+    console.log("📤 Đang bắt đầu đồng bộ dữ liệu...");
     try {
+        const payload = {
+            name: leadData.name || '',
+            phone: leadData.phone || '',
+            email: leadData.email || '',
+            interest: leadData.interest || '',
+            intent_level: leadData.intent_level || '',
+            source: window.location.href,
+            sessionId: AI_CHAT_SESSION_ID,
+            chatHistory: chatHistoryText,
+            timestamp: new Date().toLocaleString('vi-VN')
+        };
+
         await fetch(GOOGLE_SCRIPT_URL, {
             method: 'POST',
             mode: 'no-cors',
-            headers: { 'Content-Type': 'text/plain' }, // CHỈNH SỬA: Dùng text/plain để vượt qua rào cản CORS của Google
-            body: JSON.stringify({
-                name: leadData.name || '',
-                phone: leadData.phone || '',
-                email: leadData.email || '',
-                interest: leadData.interest || '',
-                intent_level: leadData.intent_level || '',
-                source: window.location.href,
-                sessionId: AI_CHAT_SESSION_ID,
-                chatHistory: chatHistoryText,
-                timestamp: new Date().toLocaleString('vi-VN')
-            })
+            headers: { 'Content-Type': 'text/plain' }, 
+            body: JSON.stringify(payload)
         });
-        console.log("📤 Đã đồng bộ dữ liệu vào Google Sheets!");
+        
+        console.log("✅ Đã gửi tín hiệu đồng bộ qua Google Sheets.");
     } catch (err) {
-        console.warn("⚠️ Không gửi được dữ liệu lead:", err);
+        console.error("❌ Lỗi kỹ thuật khi đồng bộ Sheets:", err);
     }
 }
