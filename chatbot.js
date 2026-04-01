@@ -316,7 +316,7 @@ async function sendLeadToGoogleSheets(leadData, chatHistoryText) {
         await fetch(GOOGLE_SCRIPT_URL, {
             method: 'POST',
             mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'text/plain' }, // CHỈNH SỬA: Dùng text/plain để vượt qua rào cản CORS của Google
             body: JSON.stringify({
                 name: leadData.name || '',
                 phone: leadData.phone || '',
