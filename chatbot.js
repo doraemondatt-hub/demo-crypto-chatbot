@@ -235,6 +235,7 @@ chatForm.addEventListener("submit", async (e) => {
             removeTyping();
 
             // Bóc tách lead data & gửi Google Sheets (nếu có)
+            console.log("🤖 AI Response Raw:", aiResponseContent);
             const cleanResponse = processAIResponse(aiResponseContent, chatHistory);
 
             // Lưu Logic & In Chat (lưu bản sạch, không có tag)
@@ -295,7 +296,10 @@ function processAIResponse(aiResponse, chatHistoryArray = []) {
 
                 // Gửi dữ liệu lên Google Sheets
                 if (leadData.name || leadData.phone || leadData.email) {
+                    console.log("📤 Đang gửi Lead lên Google Sheets...");
                     sendLeadToGoogleSheets(leadData, formattedHistory);
+                } else {
+                    console.log("ℹ️ Tag Lead trống, không gửi.");
                 }
             } catch (error) {
                 console.error("❌ Lỗi parse JSON từ AI:", error);
