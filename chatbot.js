@@ -286,28 +286,25 @@ function processAIResponse(aiResponse, chatHistoryArray = []) {
         }).filter(Boolean).join('\n\n');
     }
 
+    // Bóc tách Lead nếu có, nhưng LUÔN chuẩn bị gửi lịch sử chat
+    let extractedLead = {};
     if (aiResponse.includes("||LEAD_DATA:")) {
         const match = aiResponse.match(dataPattern);
-
         if (match && match[1]) {
             try {
-                const leadData = JSON.parse(match[1]);
-                console.log("✅ Dữ liệu khách hàng bóc được:", leadData);
-
-                // Gửi dữ liệu lên Google Sheets (nếu trích xuất được bất kỳ thông tin nào)
-                if (leadData.name || leadData.phone || leadData.email || leadData.interest || leadData.intent_level) {
-                    console.log("📤 Đang gửi Lead nâng cao lên Google Sheets...");
-                    sendLeadToGoogleSheets(leadData, formattedHistory);
-                } else {
-                    console.log("ℹ️ Tag Lead trống, không gửi.");
-                }
+                extractedLead = JSON.parse(match[1]);
+                console.log("✅ Dữ liệu khách hàng bóc được:", extractedLead);
             } catch (error) {
                 console.error("❌ Lỗi parse JSON từ AI:", error);
             }
         }
-        // Xóa tag khỏi câu trả lời → hiển thị sạch cho khách
+        // Xóa tag khỏi câu trả lời để không hiện ra cho khách
         aiResponse = aiResponse.replace(dataPattern, "").trim();
     }
+
+    // LUÔN GỬI DỮ LIỆU: Kể cả khi chưa có tên/số điện thoại, vẫn gửi Lịch sử chat và Session ID
+    sendLeadToGoogleSheets(extractedLead, formattedHistory);
+
     return aiResponse;
 }
 
