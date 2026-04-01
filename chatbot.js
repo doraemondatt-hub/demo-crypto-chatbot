@@ -302,8 +302,15 @@ function processAIResponse(aiResponse, chatHistoryArray = []) {
         aiResponse = aiResponse.replace(dataPattern, "").trim();
     }
 
-    // LUÔN GỬI DỮ LIỆU: Kể cả khi chưa có tên/số điện thoại, vẫn gửi Lịch sử chat và Session ID
-    sendLeadToGoogleSheets(extractedLead, formattedHistory);
+    // KIỂM TRA ĐIỀU KIỆN: Chỉ gửi dữ liệu nếu AI bóc tách được ít nhất một thông tin hữu ích
+    const hasLeadInfo = Object.values(extractedLead).some(val => val !== null && val !== "" && val !== undefined);
+    
+    if (hasLeadInfo) {
+        console.log("🚀 Đã tìm thấy thông tin Lead có giá trị, đang lưu vào database...");
+        sendLeadToGoogleSheets(extractedLead, formattedHistory);
+    } else {
+        console.log("ℹ️ Hội thoại chưa có thông tin Lead quan trọng, tạm thời không lưu.");
+    }
 
     return aiResponse;
 }
