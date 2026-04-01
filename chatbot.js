@@ -329,10 +329,10 @@ async function sendLeadToGoogleSheets(leadData, chatHistoryText) {
         await fetch(GOOGLE_SCRIPT_URL, {
             method: 'POST',
             mode: 'no-cors',
-            headers: { 'Content-Type': 'text/plain' }, 
+            headers: { 'Content-Type': 'text/plain' },
             body: JSON.stringify(payload)
         });
-        
+
         console.log("✅ Đã gửi tín hiệu đồng bộ qua Google Sheets.");
     } catch (err) {
         console.error("❌ Lỗi kỹ thuật khi đồng bộ Sheets:", err);
